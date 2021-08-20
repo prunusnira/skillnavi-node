@@ -1,0 +1,23 @@
+{
+  "name": "skillnavi-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prunusnira/skillnavi-node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prunusnira/skillnavi-node/issues"
+  },
+  "homepage": "https://github.com/prunusnira/skillnavi-node#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "typescript": "^4.3.5"
+  }
+}
