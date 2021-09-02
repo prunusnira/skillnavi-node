@@ -1,5 +1,6 @@
 import mariadb from 'mariadb'
 import { SecretData } from '../secret/SecretData'
+import { queryRecent } from './query/queryGenUser'
 import QueryType from './queryType'
 
 class DBConnector {
@@ -11,21 +12,26 @@ class DBConnector {
         connectionLimit: 5,
     })
 
-    runQuery = async (
-        queryType: QueryType,
-        parameters: [],
-    ) => {
+    queryGen = (queryType: QueryType, params: Array<string>) => {
+        switch(queryType) {
+            case QueryType.Recent:
+                return queryRecent()
+        }
+    }
+
+    runQuery = async (query: string) => {
         let dbconn, result
         try {
             dbconn = await this.dbpool.getConnection()
             dbconn.query(`USE ${SecretData.dbAccessData.dbname}`)
-            
+            result = await dbconn.query(query)
         }
         catch (error) {
-
+            throw error
         }
         finally {
             dbconn?.end()
+            return result
         }
     }
 }
