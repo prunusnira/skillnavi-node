@@ -6,3 +6,7 @@ export const queryRecent = () =>
         OR NOT gskillex = 0 OR NOT dskillex = 0 OR NOT gskillnx = 0 OR NOT dskillnx = 0
     ORDER BY updatetime DESC LIMIT 10
 `
+
+export const queryUserCount = () => (
+    'select count(*) from profile'
+)
