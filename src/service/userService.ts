@@ -1,10 +1,16 @@
 import DBConnector from "../data/database/dbConnector"
 import QueryType from "../data/database/queryType"
-import { Recent } from "../data/internal/recentUser"
 
 const db = new DBConnector()
 
 // Recent User List
 export const getRecentUserList = () => {
-    return db.runQuery(db.queryGen(QueryType.Recent, []))
+    const query = db.queryGen(QueryType.Recent, [])
+    return db.runQuery(query)
+}
+
+// 전체 유저 수 (page 계산용)
+export const getUserCount = () => {
+    const query = db.queryGen(QueryType.UserCount, [])
+    return db.runQuery(query)
 }

@@ -2,35 +2,51 @@ import request from 'supertest'
 import app from '../index'
 
 describe('SkillController', () => {
-    it('/skill/:ptype/:id/:gtype/:page/:order', () => {
-
+    it('/skill/:ptype/:id/:gtype/:page/:order', done => {
+        request(app)
+            .get('/skill/2/18/dm/1/1')
+            .expect(200, done)
     })
 
-    it('/music/:mid/:id', () => {
-
+    it('/music/:mid/:id', done => {
+        request(app)
+            .get('/music/1468/18')
+            .expect(200, done)
     })
 
-    it('/exc/:gtype', () => {
-
+    it('/exc/:gtype', done => {
+        request(app)
+            .get('/exc/dm')
+            .expect(200, done)
     })
 
-    it('/musiclist/:ver', () => {
-
+    it('/musiclist/:ver', done => {
+        request(app)
+            .get('/musiclist/29')
+            .expect(200, done)
     })
 
-    it('/getmusic/:mid', () => {
-
+    it('/getmusic/:mid', done => {
+        request(app)
+            .get('/getmusic/1')
+            .expect(200, done)
     })
 
     it('/skill/snapshot/create/:uid/:gtype', () => {
-
+        // 테스트 생략
+        console.log('test skip')
     })
 
-    it('/skill/snapshot/list/:uid', () => {
-
+    it('/skill/snapshot/list/:uid', done => {
+        request(app)
+            .get('/skill/snapshot/list/18')
+            .expect(200, done)
     })
 
-    it('/skill/snapshot/load/:uid/:date/:gtype', () => {
-        
+    it('/skill/snapshot/load/:uid/:date/:gtype', done => {
+        request(app)
+        // 수정필요
+            .get('/skill/snapshot/load/18/[date]/dm')
+            .expect(200, done)
     })
 })

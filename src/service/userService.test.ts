@@ -1,8 +1,8 @@
-import { Recent } from "../data/internal/recentUser"
-import * as userService from "../service/userService"
+import { Recent } from "../data/type/recentUser"
+import * as userService from "./userService"
 
 jest.mock('../service/userService', () => ({
-    ...jest.requireActual('../service/userService'),
+    esModule: true,
     getRecentUserList: (): Recent => ({
         "recent": [{
             "id": 1,
@@ -14,12 +14,18 @@ jest.mock('../service/userService', () => ({
             "uptimelong": 1629689929000,
             "opencount": "Y"
         }]
-    })
+    }),
+    getUserCount: () => 1
 }))
 
 describe('UserService', () => {
     it('최근 유저 목록 받아오기', async () => {
         const list = await userService.getRecentUserList()
         expect(list.recent[0].name).toEqual('TESTUSER')
+    })
+
+    it('전체 유저 수 받아오기', async () => {
+        const number = await userService.getUserCount()
+        expect(number).toEqual(1)
     })
 })
