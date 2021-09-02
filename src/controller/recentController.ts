@@ -4,9 +4,10 @@ import * as userService from '../service/userService'
 const RecentController = () => {
     const router = express.Router()
 
-    router.get('/recent', (req, res) => {
-        const recentUserList = userService.getRecentUserList()
-        res.send(JSON.stringify(recentUserList))
+    router.get('/', async (req, res) => {
+        const recentUserList = await userService.getRecentUserList()
+        res.setHeader('Content-Type', 'application/json')
+        res.send(JSON.stringify({"recent": recentUserList}))
     })
 
     return router
