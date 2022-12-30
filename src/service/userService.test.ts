@@ -1,4 +1,4 @@
-import { Recent } from "../data/type/recentUser"
+import { Recent } from "../data/type/recentUserType"
 import * as userService from "./userService"
 
 jest.mock('../service/userService', () => ({

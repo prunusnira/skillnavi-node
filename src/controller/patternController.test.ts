@@ -2,15 +2,9 @@ import request from 'supertest'
 import app from '../index'
 
 describe('PatternController', () => {
-    it('/rank/:gtype/:page', done => {
+    it('/list/:ver/:order/:page/:hot', done => {
         request(app)
-            .get('/rank/dm/1')
-            .expect(200, done)
-    })
-
-    it('/pattern/:ver/:order/:page', done => {
-        request(app)
-            .get('/pattern/26/titleasc/1')
+            .get('/list/26/titleasc/1/a')
             .expect(200, done)
     })
 

@@ -1,7 +1,8 @@
 import express from 'express'
 import config from '../server-config.json'
-import PatternController from './controller/patternController'
+import SkillController from './controller/skillController'
 import RecentController from './controller/recentController'
+import PatternController from './controller/patternController'
 
 const app = express()
 
@@ -9,7 +10,8 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
 app.use('/recent', RecentController())
-app.use('/', PatternController())
+app.use('/skill', SkillController())
+app.use('/pattern', PatternController())
 
 app.listen(config.server.port, () => {
     console.log(
