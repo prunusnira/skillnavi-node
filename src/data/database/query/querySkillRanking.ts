@@ -2,7 +2,12 @@ export const querySkillRanking = (params: Array<string>) => {
     const [gtype, pagestr] = params
     const page = parseInt(pagestr)
 
-    let query = 'SELECT * FROM profile '
+    let query = `
+    SELECT
+        id, titletower, name,
+        gskill, dskill,
+        opencount, uptimelong
+    FROM profile `
     switch(gtype) {
         case 'gf':
             query += 'ORDER BY gskill DESC '

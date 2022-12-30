@@ -2,6 +2,12 @@ import request from 'supertest'
 import app from '../index'
 
 describe('SkillController', () => {
+    it('/rank/:gtype/:page', done => {
+        request(app)
+            .get('/rank/dm/1')
+            .expect(200, done)
+    })
+
     it('/skill/:ptype/:id/:gtype/:page/:order', done => {
         request(app)
             .get('/skill/2/18/dm/1/1')

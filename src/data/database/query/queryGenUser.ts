@@ -8,5 +8,5 @@ export const queryRecent = () =>
 `
 
 export const queryUserCount = () => (
-    'select count(*) from profile'
+    'select count(*) as count from profile'
 )

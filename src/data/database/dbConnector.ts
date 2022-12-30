@@ -26,6 +26,15 @@ class DBConnector {
         }
     }
 
+    queryMusicList = (
+        queryType: QueryType,
+        verlist: Array<number>,
+        hot: string,
+        order: string
+    ) => {
+        
+    }
+
     runQuery = async (query: string) => {
         let dbconn, result
         try {
