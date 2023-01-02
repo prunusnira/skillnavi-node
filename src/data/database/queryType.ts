@@ -1,8 +1,9 @@
 const enum QueryType {
     Recent,
+    UserByToken,
     UserCount,
     SkillRanking,
     PatternList,
 }
 
-export default QueryType
+export default QueryType;
