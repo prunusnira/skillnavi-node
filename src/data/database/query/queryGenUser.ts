@@ -10,4 +10,17 @@ export const queryRecent = () =>
 export const queryUserCount = () => "select count(*) as count from profile";
 
 export const queryGetUserToken = (params: Array<string>) =>
-    `SELECT * FROM profile WHERE token=${params[0]}`;
+    `SELECT * FROM profile WHERE token='${params[0]}'`;
+
+export const queryGetUserId = (params: Array<string>) =>
+    `SELECT * FROM profile WHERE id=${params[0]}`;
+
+export const queryUpdateDataOpen = (params: Array<string>) =>
+    `UPDATE profile SET
+        opencount='${params[0]}'
+        WHERE id=${params[1]}`;
+
+export const queryUpdateComment = (params: Array<string>) =>
+    `UPDATE profile SET
+        comment='${params[0]}'
+    	WHERE id=${params[1]}`;

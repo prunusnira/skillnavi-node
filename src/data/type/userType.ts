@@ -42,5 +42,5 @@ export type UserType = {
     updatetime: number;
     uptimelong: number;
     pausetype: string;
-    pausedate: number;
+    pausedate?: number;
 };

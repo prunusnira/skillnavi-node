@@ -1,8 +1,16 @@
 import mariadb from "mariadb";
 import { SecretData } from "../secret/SecretData";
 import {
+    queryNonPlay,
+    queryTotalPatternCountDM,
+    queryTotalPatternCountGF,
+} from "./query/queryGenMusic";
+import {
+    queryGetUserId,
     queryGetUserToken,
     queryRecent,
+    queryUpdateComment,
+    queryUpdateDataOpen,
     queryUserCount,
 } from "./query/queryGenUser";
 import { querySkillRanking } from "./query/querySkillRanking";
@@ -19,14 +27,30 @@ class DBConnector {
 
     queryGen = (queryType: QueryType, params: Array<string>): string => {
         switch (queryType) {
+            // Profile
+            case QueryType.UserByToken:
+                return queryGetUserToken(params);
+            case QueryType.UserById:
+                return queryGetUserId(params);
+            case QueryType.UpdateDataOpen:
+                return queryUpdateDataOpen(params);
+            case QueryType.UpdateComment:
+                return queryUpdateComment(params);
+
+            // Music
+            case QueryType.TotalPatternCountGF:
+                return queryTotalPatternCountGF(params);
+            case QueryType.TotalPatternCountDM:
+                return queryTotalPatternCountDM(params);
+            case QueryType.NonPlay:
+                return queryNonPlay(params);
+
             case QueryType.Recent:
                 return queryRecent();
             case QueryType.UserCount:
                 return queryUserCount();
             case QueryType.SkillRanking:
                 return querySkillRanking(params);
-            case QueryType.UserByToken:
-                return queryGetUserToken(params);
             default:
                 return "";
         }

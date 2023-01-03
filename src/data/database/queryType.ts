@@ -1,6 +1,22 @@
 const enum QueryType {
-    Recent,
+    // Profile
     UserByToken,
+    UserById,
+    UpdateDataOpen,
+    UpdateComment,
+
+    // Music
+    TotalPatternCountGF,
+    TotalPatternCountDM,
+
+    // Skill
+    PatternCount,
+    MybestPattern,
+    MybestPatternG,
+    MybestPatternD,
+    MybestMusic,
+
+    Recent,
     UserCount,
     SkillRanking,
     PatternList,

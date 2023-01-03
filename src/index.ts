@@ -5,6 +5,7 @@ import SkillController from "./controller/skillController";
 import RecentController from "./controller/recentController";
 import PatternController from "./controller/patternController";
 import { SecretData } from "./data/secret/SecretData";
+import ProfileController from "./controller/profileController";
 
 declare module "express-session" {
     interface SessionData {
@@ -14,14 +15,15 @@ declare module "express-session" {
 
 const app = express();
 
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(
     session({
         secret: SecretData.sessionKey,
     })
 );
 
+app.use("/", ProfileController());
 app.use("/recent", RecentController());
 app.use("/skill", SkillController());
 app.use("/pattern", PatternController());
