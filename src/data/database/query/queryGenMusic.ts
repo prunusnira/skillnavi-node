@@ -73,12 +73,12 @@ export const queryNonPlay = (params: Array<string>) => {
 		) as a
 		
 		where
-            ${params[0] === "gf" && "ptcode <= 8"}
-            ${params[0] === "dm" && "ptcode >= 9"}
-            ${version.length > 0 && genNonPlayVersion(version)}
-            ${params[6] === "h" && `AND hot="Y"`}
-            ${params[6] === "o" && `AND hot="N"`}
-            ${lv.length > 0 && genNonPlayLv(lv)}
+            ${params[0] === "gf" ? "ptcode <= 8" : ""}
+            ${params[0] === "dm" ? "ptcode >= 9" : ""}
+            ${version.length > 0 ? genNonPlayVersion(version) : ""}
+            ${params[6] === "h" ? `AND hot="Y"` : ""}
+            ${params[6] === "o" ? `AND hot="N"` : ""}
+            ${lv.length > 0 ? genNonPlayLv(lv) : ""}
 			and
 				(id, ptcode)
 			not in
@@ -100,12 +100,12 @@ export const queryNonPlay = (params: Array<string>) => {
                     }
 			)
 		ORDER BY
-            ${params[6] === "titleasc" && "hurigana ASC"}
-            ${params[6] === "titledesc" && "hurigana DESC"}
-            ${params[6] === "verasc" && "version ASC"}
-            ${params[6] === "verdesc" && "version DESC"}
-            ${params[6] === "lvasc" && "lv ASC"}
-            ${params[6] === "lvdesc" && "lv DESC"}`;
+            ${params[6] === "titleasc" ? "hurigana ASC" : ""}
+            ${params[6] === "titledesc" ? "hurigana DESC" : ""}
+            ${params[6] === "verasc" ? "version ASC" : ""}
+            ${params[6] === "verdesc" ? "version DESC" : ""}
+            ${params[6] === "lvasc" ? "lv ASC" : ""}
+            ${params[6] === "lvdesc" ? "lv DESC" : ""}`;
 };
 
 const genNonPlayVersion = (version: Array<number>) => {

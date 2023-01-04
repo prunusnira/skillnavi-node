@@ -143,8 +143,10 @@ const ProfileController = () => {
             body: { open, id },
         } = req;
 
-        await updateDataOpen(open, id);
-        res.send(200);
+        if (open && id) {
+            await updateDataOpen(open, id);
+            res.sendStatus(200);
+        } else res.sendStatus(400);
     });
 
     // set comment
@@ -153,8 +155,10 @@ const ProfileController = () => {
             body: { comment, id },
         } = req;
 
-        await updateComment(comment, id);
-        res.send(200);
+        if (comment && id) {
+            await updateComment(comment, id);
+            res.sendStatus(200);
+        } else res.sendStatus(400);
     });
 
     // non-play patterns
@@ -173,6 +177,16 @@ const ProfileController = () => {
             if (hot) filteredHot = Filter.filterHot(hot);
             if (order) filteredOrder = Filter.filterOrder(order);
 
+            console.log(`
+                ${gtype}
+                ${id}
+                ${vertype}
+                ${filteredLv}
+                ${filteredVer}
+                ${filteredHot}
+                ${filteredOrder}
+            `);
+
             const data: Array<NonPlayType> = await getNonPlayed(
                 gtype,
                 id,
@@ -188,15 +202,15 @@ const ProfileController = () => {
             const pages = CommonTools.getListPages(data, 30);
 
             res.setHeader("Content-Type", "application/json");
-            res.send(`music: ${sendList},
+            res.send(`{music: ${JSON.stringify(sendList)},
                     page: ${page},
                     pages: ${pages},
                     gtype: ${gtype},
-                    order: ${filteredOrder},
-                    lv: ${filteredLv},
-                    hot: ${filteredHot},
-                    ver: ${filteredVer},
-                    userid: ${id}`);
+                    ${filteredOrder ? `order: ${filteredOrder},` : ""}
+                    ${filteredLv.length > 0 ? `lv: ${filteredLv},` : ""}
+                    ${filteredHot ? `hot: ${filteredHot},` : ""}
+                    ${filteredVer.length > 0 ? `ver: ${filteredVer},` : ""}
+                    userid: ${id}}`);
         }
     );
 
