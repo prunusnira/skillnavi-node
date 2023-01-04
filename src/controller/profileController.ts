@@ -1,20 +1,41 @@
 import express, { Request } from "express";
 import { ClearTableType } from "../data/type/clearTableType";
 import { NonPlayType } from "../data/type/nonPlayType";
+import { SkillType } from "../data/type/skillType";
+import { TowerManageType } from "../data/type/towerManageType";
+import { TowerType } from "../data/type/towerType";
 import { UserType } from "../data/type/userType";
 import { getNonPlayed, getTotalPatternCount } from "../service/musicService";
 import {
     getMybestMusic,
     getMybestPattern,
     getPatternCount,
+    getPlayCount,
+    getSkill,
+    resetSkill,
 } from "../service/skillService";
+import {
+    clearCheck,
+    getTowerData,
+    getTowerInfo,
+    getTowerList,
+    resetTower,
+    selectFloorStatus,
+    selectTowerStatus,
+    towerCheck,
+    updateFloorStatus,
+    updateTowerStatus,
+} from "../service/towerService";
 import {
     getSkillRecord,
     getUserById,
     getUserByToken,
+    resetUser,
     updateComment,
     updateDataOpen,
+    updatePlayCount,
 } from "../service/userService";
+import CommonTools from "../tool/CommonTools";
 import Filter from "../tool/Filter";
 
 type NonPlayParams = {
@@ -27,8 +48,12 @@ type NonPlayParams = {
 type NonPlayQuery = {
     version?: string;
     order?: string;
-    level?: number;
+    level?: string;
     hot?: string;
+};
+
+type ResetBody = {
+    id: string;
 };
 
 const ProfileController = () => {
@@ -119,6 +144,7 @@ const ProfileController = () => {
         } = req;
 
         await updateDataOpen(open, id);
+        res.send(200);
     });
 
     // set comment
@@ -128,6 +154,7 @@ const ProfileController = () => {
         } = req;
 
         await updateComment(comment, id);
+        res.send(200);
     });
 
     // non-play patterns
@@ -141,7 +168,7 @@ const ProfileController = () => {
             let filteredVer: Array<number> = [];
             let filteredHot: string = "";
             let filteredOrder: string = "lvdesc";
-            if (level) filteredLv = Filter.filterLevel(level);
+            if (level) filteredLv = Filter.filterLevel(parseInt(level));
             if (version) filteredVer = Filter.filterVersion(version);
             if (hot) filteredHot = Filter.filterHot(hot);
             if (order) filteredOrder = Filter.filterOrder(order);
@@ -155,8 +182,124 @@ const ProfileController = () => {
                 filteredHot,
                 filteredOrder
             );
+
+            // 페이지에 맞게 30개만 긁어오기
+            const sendList = CommonTools.getPagedList(data, page, 30);
+            const pages = CommonTools.getListPages(data, 30);
+
+            res.setHeader("Content-Type", "application/json");
+            res.send(`music: ${sendList},
+                    page: ${page},
+                    pages: ${pages},
+                    gtype: ${gtype},
+                    order: ${filteredOrder},
+                    lv: ${filteredLv},
+                    hot: ${filteredHot},
+                    ver: ${filteredVer},
+                    userid: ${id}`);
         }
     );
+
+    router.post("/resetdata", (req: Request<{}, {}, ResetBody, {}>, res) => {
+        const {
+            body: { id },
+        } = req;
+        resetUser(id);
+        resetSkill(id);
+        res.send(200);
+    });
+
+    router.post("/d/profile/towerupdate/:id", async (req, res) => {
+        const id = req.params.id;
+        resetTower(id);
+
+        const towerList: Array<string> = await getTowerList();
+
+        towerList.forEach(async (x) => {
+            if (towerCheck(x)) {
+                const info: TowerManageType = await getTowerInfo(x);
+                const sizeAll = new Array<number>(info.levels).fill(0);
+                const sizeCl = new Array<number>(info.levels).fill(0);
+                const towerData: Array<TowerType> = await getTowerData(x);
+
+                towerData.forEach(async (t, i) => {
+                    const skill: SkillType = await getSkill(
+                        id,
+                        t.musicid,
+                        t.ptcode
+                    );
+                    const clear = clearCheck(t, skill);
+                    if (clear) {
+                        updateFloorStatus(
+                            id,
+                            x,
+                            t.floor,
+                            t.musicid,
+                            t.ptcode,
+                            "Y"
+                        );
+                        sizeCl[t.floor]++;
+                    } else {
+                        updateFloorStatus(
+                            id,
+                            x,
+                            t.floor,
+                            t.musicid,
+                            t.ptcode,
+                            "N"
+                        );
+                    }
+                    sizeAll[t.floor]++;
+                });
+
+                for (let i = 0; i < info.levels; i++) {
+                    let all = sizeAll[i];
+                    let clear = sizeCl[i];
+                    if (clear >= all * 0.7) updateTowerStatus(id, x, i, "Y");
+                    else updateTowerStatus(id, x, i, "N");
+                }
+            }
+        });
+        res.send(200);
+    });
+
+    router.get("/profile/towerstatus/tower/:id", async (req, res) => {
+        const id = req.params.id;
+        const info: Array<string> = await getTowerList();
+        const filtered = info.filter((x, i) => {
+            x !== "towerSample" &&
+                x !== "towerManage" &&
+                x !== "towerTest" &&
+                x !== "towerStatusClear" &&
+                x !== "towerStatusFloor";
+        });
+
+        const tower = selectTowerStatus(id);
+
+        res.setHeader("Content-Type", "application/json");
+        res.send(
+            `list: ${JSON.stringify(info)}, tower: ${JSON.stringify(tower)}`
+        );
+    });
+
+    router.get("/profile/towerstatus/floor/:id", async (req, res) => {
+        const id = req.params.id;
+        const floor = selectFloorStatus(id);
+
+        res.setHeader("Content-Type", "application/json");
+        res.send(`floor: ${JSON.stringify(floor)}`);
+    });
+
+    router.post("/profile/countupdate/:id", async (req, res) => {
+        const id = req.params.id;
+        const gfc: number = await getPlayCount(id, "gf");
+        const dfc: number = await getPlayCount(id, "dm");
+        updatePlayCount(id, "gf", gfc);
+        updatePlayCount(id, "dm", dfc);
+        updatePlayCount(id, "all", gfc + dfc);
+
+        res.send(200);
+    });
 
     return router;
 };

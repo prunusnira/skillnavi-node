@@ -24,3 +24,42 @@ export const queryUpdateComment = (params: Array<string>) =>
     `UPDATE profile SET
         comment='${params[0]}'
     	WHERE id=${params[1]}`;
+
+export const queryResetUser = (params: Array<string>) =>
+    `UPDATE profile SET
+        title="",
+        name="",
+        gskill=0,
+        dskill=0,
+        gskillhv=0,
+        dskillhv=0,
+        gskillnx=0,
+        dskillnx=0,
+        gskillex=0,
+        dskillex=0,
+        gskillmx=0,
+        dskillmx=0,
+        gskilltbre=0,
+        dskilltbre=0,
+        gskilltb=0,
+        dskilltb=0,
+        gskillall=0,
+        dskillall=0,
+        gclearlv = 0,
+        dclearlv = 0,
+        gclearnum = 0,
+        dclearnum = 0,
+        gfclv = 0,
+        dfclv = 0,
+        gfcnum = 0,
+        dfcnum = 0,
+        gexclv = 0,
+        dexclv = 0,
+        gexcnum = 0,
+        dexcnum = 0,
+        comment="",
+        opencount="N",
+        countall=0,
+        countgf=0,
+        countdm=0
+        WHERE id = ${params[0]}`;

@@ -4,10 +4,13 @@ const enum QueryType {
     UserById,
     UpdateDataOpen,
     UpdateComment,
+    ResetUser,
+    UpdatePlayCount,
 
     // Music
     TotalPatternCountGF,
     TotalPatternCountDM,
+    NonPlay,
 
     // Skill
     PatternCount,
@@ -15,6 +18,20 @@ const enum QueryType {
     MybestPatternG,
     MybestPatternD,
     MybestMusic,
+    ResetSkill,
+    SkillData,
+    PlayCount,
+
+    // Tower
+    RemoveTowerFloor,
+    RemoveTowerClear,
+    TowerList,
+    TowerInfo,
+    TowerData,
+    TowerFloorUpdate,
+    TowerStatusUpdate,
+    SelectTowerStatus,
+    SelectFloorStatus,
 
     Recent,
     UserCount,

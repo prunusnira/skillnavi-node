@@ -4,6 +4,15 @@ import { MostPlayedPatternType } from "../data/type/mostPlayedType";
 
 const db = new skillService();
 
+export const getSkill = (id: string, mid: number, ptcode: number) => {
+    const query = db.queryGen(QueryType.SkillData, [
+        id,
+        mid.toString(),
+        ptcode.toString(),
+    ]);
+    return db.runQuery(query);
+};
+
 export const getSkillRanking = (gtype: string, page: string) => {
     // 페이지로 나누어진 스킬랭킹 데이터 가져오기
     const query = db.queryGen(QueryType.SkillRanking, [gtype, page]);
@@ -79,5 +88,15 @@ export const getMybestPattern = (id: string, type: number) => {
 // mybest music
 export const getMybestMusic = (id: string) => {
     const query = db.queryGen(QueryType.MybestMusic, [id]);
+    return db.runQuery(query);
+};
+
+export const resetSkill = (id: string) => {
+    const query = db.queryGen(QueryType.ResetSkill, [id]);
+    db.runQuery(query);
+};
+
+export const getPlayCount = (id: string, gtype: string) => {
+    const query = db.queryGen(QueryType.PlayCount, [id, gtype]);
     return db.runQuery(query);
 };

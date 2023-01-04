@@ -95,3 +95,17 @@ export const updateSkillRecord = (
     }
     // content.push({});
 };
+
+export const resetUser = (id: string) => {
+    const query = db.queryGen(QueryType.ResetUser, [id]);
+    db.runQuery(query);
+};
+
+export const updatePlayCount = (id: string, gtype: string, count: number) => {
+    const query = db.queryGen(QueryType.UpdatePlayCount, [
+        id,
+        gtype,
+        count.toString(),
+    ]);
+    db.runQuery(query);
+};

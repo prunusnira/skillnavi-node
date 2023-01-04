@@ -32,3 +32,6 @@ export const getPatternCount = (params: Array<string>) =>
 
 WHERE
     r.level >= ${params[2]} AND r.level < ${params[2]}+50`;
+
+export const queryResetSkill = (params: Array<string>) =>
+    `DELETE FROM skill WHERE userid=${params[0]}`;
