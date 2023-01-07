@@ -5,10 +5,13 @@ import {
     queryTotalPatternCountDM,
     queryTotalPatternCountGF,
 } from "./query/queryGenMusic";
+import { queryResetSkill } from "./query/queryGenSkill";
+import { queryTowerInfo, queryTowerList } from "./query/queryGenTower";
 import {
     queryGetUserId,
     queryGetUserToken,
     queryRecent,
+    queryResetUser,
     queryUpdateComment,
     queryUpdateDataOpen,
     queryUserCount,
@@ -36,6 +39,8 @@ class DBConnector {
                 return queryUpdateDataOpen(params);
             case QueryType.UpdateComment:
                 return queryUpdateComment(params);
+            case QueryType.ResetUser:
+                return queryResetUser(params);
 
             // Music
             case QueryType.TotalPatternCountGF:
@@ -44,6 +49,20 @@ class DBConnector {
                 return queryTotalPatternCountDM(params);
             case QueryType.NonPlay:
                 return queryNonPlay(params);
+
+            // Skill
+            case QueryType.ResetSkill:
+                return queryResetSkill(params);
+
+            // Tower
+            case QueryType.TowerList:
+                return queryTowerList();
+            case QueryType.TowerInfo:
+                return queryTowerInfo(params);
+            case QueryType.RemoveTowerFloor:
+                return ``;
+            case QueryType.RemoveTowerClear:
+                return ``;
 
             case QueryType.Recent:
                 return queryRecent();

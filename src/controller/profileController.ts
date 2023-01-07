@@ -177,16 +177,6 @@ const ProfileController = () => {
             if (hot) filteredHot = Filter.filterHot(hot);
             if (order) filteredOrder = Filter.filterOrder(order);
 
-            console.log(`
-                ${gtype}
-                ${id}
-                ${vertype}
-                ${filteredLv}
-                ${filteredVer}
-                ${filteredHot}
-                ${filteredOrder}
-            `);
-
             const data: Array<NonPlayType> = await getNonPlayed(
                 gtype,
                 id,
@@ -220,7 +210,7 @@ const ProfileController = () => {
         } = req;
         resetUser(id);
         resetSkill(id);
-        res.send(200);
+        res.sendStatus(200);
     });
 
     router.post("/d/profile/towerupdate/:id", async (req, res) => {
@@ -229,52 +219,61 @@ const ProfileController = () => {
 
         const towerList: Array<string> = await getTowerList();
 
-        towerList.forEach(async (x) => {
-            if (towerCheck(x)) {
-                const info: TowerManageType = await getTowerInfo(x);
-                const sizeAll = new Array<number>(info.levels).fill(0);
-                const sizeCl = new Array<number>(info.levels).fill(0);
-                const towerData: Array<TowerType> = await getTowerData(x);
+        if (towerList) {
+            towerList.forEach(async (x) => {
+                if (towerCheck(x)) {
+                    const info: TowerManageType = await getTowerInfo(x);
+                    const sizeAll = new Array<number>(info.levels).fill(0);
+                    const sizeCl = new Array<number>(info.levels).fill(0);
+                    const towerData: Array<TowerType> = await getTowerData(x);
 
-                towerData.forEach(async (t, i) => {
-                    const skill: SkillType = await getSkill(
-                        id,
-                        t.musicid,
-                        t.ptcode
-                    );
-                    const clear = clearCheck(t, skill);
-                    if (clear) {
-                        updateFloorStatus(
-                            id,
-                            x,
-                            t.floor,
-                            t.musicid,
-                            t.ptcode,
-                            "Y"
-                        );
-                        sizeCl[t.floor]++;
+                    if (towerData) {
+                        towerData.forEach(async (t, i) => {
+                            const skill: SkillType = await getSkill(
+                                id,
+                                t.musicid,
+                                t.ptcode
+                            );
+                            const clear = clearCheck(t, skill);
+                            if (clear) {
+                                updateFloorStatus(
+                                    id,
+                                    x,
+                                    t.floor,
+                                    t.musicid,
+                                    t.ptcode,
+                                    "Y"
+                                );
+                                sizeCl[t.floor]++;
+                            } else {
+                                updateFloorStatus(
+                                    id,
+                                    x,
+                                    t.floor,
+                                    t.musicid,
+                                    t.ptcode,
+                                    "N"
+                                );
+                            }
+                            sizeAll[t.floor]++;
+                        });
+
+                        for (let i = 0; i < info.levels; i++) {
+                            let all = sizeAll[i];
+                            let clear = sizeCl[i];
+                            if (clear >= all * 0.7)
+                                updateTowerStatus(id, x, i, "Y");
+                            else updateTowerStatus(id, x, i, "N");
+                        }
+                        res.sendStatus(200);
                     } else {
-                        updateFloorStatus(
-                            id,
-                            x,
-                            t.floor,
-                            t.musicid,
-                            t.ptcode,
-                            "N"
-                        );
+                        res.sendStatus(400);
                     }
-                    sizeAll[t.floor]++;
-                });
-
-                for (let i = 0; i < info.levels; i++) {
-                    let all = sizeAll[i];
-                    let clear = sizeCl[i];
-                    if (clear >= all * 0.7) updateTowerStatus(id, x, i, "Y");
-                    else updateTowerStatus(id, x, i, "N");
                 }
-            }
-        });
-        res.send(200);
+            });
+        } else {
+            res.sendStatus(400);
+        }
     });
 
     router.get("/profile/towerstatus/tower/:id", async (req, res) => {

@@ -62,4 +62,4 @@ export const queryResetUser = (params: Array<string>) =>
         countall=0,
         countgf=0,
         countdm=0
-        WHERE id = ${params[0]}`;
+        WHERE id=${params[0]}`;
