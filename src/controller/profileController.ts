@@ -11,7 +11,7 @@ import {
     getMybestPattern,
     getPatternCount,
     getPlayCount,
-    getSkill,
+    getSkillOne,
     resetSkill,
 } from "../service/skillService";
 import {
@@ -61,7 +61,7 @@ const ProfileController = () => {
 
         if (!token) token = "";
         res.setHeader("Content-Type", "application/json");
-        res.send(`token: ${token}`);
+        res.send(`{token: ${token}}`);
     });
 
     // 토큰에서 사용자 가져오기
@@ -73,7 +73,7 @@ const ProfileController = () => {
         console.log(user);
 
         res.setHeader("Content-Type", "application/json");
-        res.send(`mydata: ${JSON.stringify(user)}`);
+        res.send(`{mydata: ${JSON.stringify(user)}}`);
     });
 
     // 사용자 아이디에서 사용자 가져오기
@@ -86,7 +86,7 @@ const ProfileController = () => {
         if (token) rtnData = rtnData.concat(`, token: '${token}'`);
 
         res.setHeader("Content-Type", "application/json");
-        res.send(rtnData);
+        res.send(`{${rtnData}}`);
     });
 
     router.get("/skillrecord/:id", (req, res) => {
@@ -94,7 +94,7 @@ const ProfileController = () => {
         const record = getSkillRecord(id);
 
         res.setHeader("Content-Type", "application/json");
-        res.send(`record: ${JSON.stringify(record)}`);
+        res.send(`{record: ${JSON.stringify(record)}}`);
     });
 
     router.get("/cleartable/:gtype/:id", async (req, res) => {
@@ -114,7 +114,7 @@ const ProfileController = () => {
         }
 
         res.setHeader("Content-Type", "application/json");
-        res.send(`ctable: ${JSON.stringify(table)}`);
+        res.send(`{ctable: ${JSON.stringify(table)}}`);
     });
 
     // mybest
@@ -126,10 +126,10 @@ const ProfileController = () => {
         const mbm = getMybestMusic(id);
 
         res.setHeader("Content-Type", "application/json");
-        res.send(`mybestp: ${JSON.stringify(mbp)},
+        res.send(`{mybestp: ${JSON.stringify(mbp)},
         mybestpg: ${JSON.stringify(mbpg)},
         mybestpd: ${JSON.stringify(mbpd)},
-        mybestm: ${JSON.stringify(mbm)}`);
+        mybestm: ${JSON.stringify(mbm)}}`);
     });
 
     // set open data

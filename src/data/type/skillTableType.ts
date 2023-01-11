@@ -1,0 +1,21 @@
+export type SkillTableType = {
+    musicid: number;
+    mname: string;
+    hurigana: string;
+    ishot: string;
+    patterncode: number;
+    rank: string;
+    rate: number;
+    ratehv: number;
+    ratenx: number;
+    rateex: number;
+    ratemx: number;
+    ratetbre: number;
+    ratetb: number;
+    version: number;
+    combo: number;
+    playtime: number;
+    level: number;
+    checkfc: string;
+    meter: string;
+};

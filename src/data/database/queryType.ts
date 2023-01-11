@@ -15,6 +15,8 @@ const enum QueryType {
     TotalPatternCountGF,
     TotalPatternCountDM,
     NonPlay,
+    MusicInfo,
+    MusicList,
 
     // Skill
     PatternCount,
@@ -23,8 +25,12 @@ const enum QueryType {
     MybestPatternD,
     MybestMusic,
     ResetSkill,
-    SkillData,
+    SkillDataOne,
+    SkillDataMid,
+    SkillDataAll,
+    SkillDataTarget,
     PlayCount,
+    EXCSkill,
 
     // Tower
     TowerList,

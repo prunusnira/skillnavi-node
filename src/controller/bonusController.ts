@@ -8,7 +8,7 @@ const BonusController = () => {
     router.get("/lvdiff/:type", async (req, res) => {
         const type = req.params.type;
         const lvDiff: Array<LvDiffType> = await getLevelDiff(type);
-        res.send(`lvdiff: ${JSON.stringify(lvDiff)}`);
+        res.send(`{lvdiff: ${JSON.stringify(lvDiff)}}`);
     });
 
     return router;

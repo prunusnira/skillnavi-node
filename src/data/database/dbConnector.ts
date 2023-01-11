@@ -2,14 +2,19 @@ import mariadb from "mariadb";
 import { SecretData } from "../secret/SecretData";
 import { queryLvDiffDM, queryLvDiffGF } from "./query/queryGenBonus";
 import {
+    queryMusicInfo,
+    queryMusicList,
     queryNonPlay,
     queryTotalPatternCountDM,
     queryTotalPatternCountGF,
 } from "./query/queryGenMusic";
 import {
+    queryEXCSkill,
     queryPlayCount,
     queryResetSkill,
-    querySkillData,
+    querySkillDataMid,
+    querySkillDataOne,
+    querySkillDataTarget,
 } from "./query/queryGenSkill";
 import {
     queryTowerData,
@@ -26,7 +31,7 @@ import {
     queryUpdatePlayCount,
     queryUserCount,
 } from "./query/queryGenUser";
-import { querySkillRanking } from "./query/querySkillRanking";
+import { querySkillRanking } from "./query/queryGenSkillRanking";
 import QueryType from "./queryType";
 
 class DBConnector {
@@ -71,16 +76,26 @@ class DBConnector {
                 return queryTotalPatternCountDM(params);
             case QueryType.NonPlay:
                 return queryNonPlay(params);
+            case QueryType.MusicInfo:
+                return queryMusicInfo(params);
+            case QueryType.MusicList:
+                return queryMusicList(params);
 
             // Skill
             case QueryType.SkillRanking:
                 return querySkillRanking(params);
             case QueryType.ResetSkill:
                 return queryResetSkill(params);
-            case QueryType.SkillData:
-                return querySkillData(params);
+            case QueryType.SkillDataOne:
+                return querySkillDataOne(params);
+            case QueryType.SkillDataMid:
+                return querySkillDataMid(params);
+            case QueryType.SkillDataTarget:
+                return querySkillDataTarget(params);
             case QueryType.PlayCount:
                 return queryPlayCount(params);
+            case QueryType.EXCSkill:
+                return queryEXCSkill(params);
 
             // Tower
             case QueryType.TowerList:

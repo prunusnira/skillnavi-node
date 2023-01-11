@@ -30,5 +30,18 @@ class CommonTools {
             ? list.length / pageSize
             : Math.floor(list.length / pageSize + 1);
     }
+
+    static convertOrder(order: string) {
+        switch (order) {
+            case "titleasc":
+                return "hurigana ASC";
+            case "titledesc":
+                return "hurigana DESC";
+            case "verasc":
+                return "version ASC";
+            case "verdesc":
+                return "version DESC";
+        }
+    }
 }
 export default CommonTools;

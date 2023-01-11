@@ -1,3 +1,5 @@
+import CommonTools from "../../../tool/CommonTools";
+
 export const queryTotalPatternCountGF = (
     params: Array<string>
 ) => `SELECT A.gb+B.ga+C.ge+D.gm+E.bb+F.ba+G.be+H.bm FROM
@@ -127,3 +129,15 @@ const genNonPlayLv = (lv: Array<number>) => {
     query += ")";
     return query;
 };
+
+export const queryMusicInfo = (params: Array<string>) =>
+    `SELECT * FROM music where id = ${params[0]}`;
+
+export const queryMusicList = (params: Array<string>) =>
+    `SELECT * FROM music
+    ${params[0] !== "00" ? `WHERE version=` + params[0] : ""}
+    ${params[0] === "00" ? "WHERE " : ""}
+    ${params[0] !== "00" && params[1] !== "" ? "AND " : ""}
+    ${params[1] === "hot" ? 'hot="Y"' : params[1] === "other" ? 'hot="N"' : ""}
+
+    ORDER BY ${CommonTools.convertOrder(params[2])}`;

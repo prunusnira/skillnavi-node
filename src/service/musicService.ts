@@ -40,3 +40,13 @@ export const getNonPlayed = (
     ]);
     return db.runQuery(query);
 };
+
+export const getMusicInfo = (mid: string) => {
+    const query = db.queryGen(QueryType.MusicInfo, [mid]);
+    return db.runQuery(query);
+};
+
+export const getMusicList = (ver: string, type: string, order: string) => {
+    const query = db.queryGen(QueryType.MusicList, [ver, type, order]);
+    return db.runQuery(query);
+};

@@ -7,6 +7,7 @@ import PatternController from "./controller/patternController";
 import { SecretData } from "./data/secret/SecretData";
 import ProfileController from "./controller/profileController";
 import BonusController from "./controller/bonusController";
+import MusicController from "./controller/musicController";
 
 declare module "express-session" {
     interface SessionData {
@@ -27,7 +28,8 @@ app.use(
 app.use("/", ProfileController());
 app.use("/", BonusController());
 app.use("/recent", RecentController());
-app.use("/skill", SkillController());
+app.use("/", SkillController());
+app.use("/", MusicController());
 app.use("/pattern", PatternController());
 
 app.listen(config.server.port, () => {
