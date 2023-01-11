@@ -1,5 +1,6 @@
 import mariadb from "mariadb";
 import { SecretData } from "../secret/SecretData";
+import { queryLvDiffDM, queryLvDiffGF } from "./query/queryGenBonus";
 import {
     queryNonPlay,
     queryTotalPatternCountDM,
@@ -39,6 +40,12 @@ class DBConnector {
 
     queryGen = (queryType: QueryType, params: Array<string>): string => {
         switch (queryType) {
+            // Bonus
+            case QueryType.LvDiffGF:
+                return queryLvDiffGF();
+            case QueryType.LvDiffDM:
+                return queryLvDiffDM();
+
             // User
             case QueryType.Recent:
                 return queryRecent();

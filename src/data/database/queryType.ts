@@ -1,4 +1,8 @@
 const enum QueryType {
+    // Bonus
+    LvDiffGF,
+    LvDiffDM,
+
     // Profile
     UserByToken,
     UserById,
