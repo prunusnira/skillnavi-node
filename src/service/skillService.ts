@@ -5,6 +5,9 @@ import { MostPlayedPatternType } from "../data/type/mostPlayedType";
 import { SkillTableType } from "../data/type/skillTableType";
 import { SnapshotDataType } from "../data/type/snapshotDataType";
 import { UserType } from "../data/type/userType";
+import CommonTools from "../tool/CommonTools";
+import fs from "fs";
+import { SecretData } from "../data/secret/SecretData";
 
 const db = new skillService();
 
@@ -55,10 +58,10 @@ export const getSkillTarget = (
         version,
         id,
         type,
-        gtype
-    ])
-    return db.runQuery(query)
-}
+        gtype,
+    ]);
+    return db.runQuery(query);
+};
 
 // PType Table 데이터 가져오기
 export const getSkillTablePType = (
@@ -196,87 +199,76 @@ const putSnapshotData = (data: SkillTableType) => {
         version: data.version,
         lv: data.level,
         rate: data.rate,
-        skill: Math.floor((data.rate*data.level*20/10000)/100),
+        skill: Math.floor((data.rate * data.level * 20) / 10000 / 100),
         rank: data.rank,
         fc: data.checkfc,
-        meter: data.meter
-    }
-    return snapshotData
-}
+        meter: data.meter,
+    };
+    return snapshotData;
+};
 
-export const createSnapshot = async (id: string, gtype: string, name: string) => {
-    const hot: Array<SkillTableType> = await getSkillTarget(INFOVER.CURRENT, id, "h", gtype)
-	const oth: Array<SkillTableType> = await getSkillTarget(INFOVER.CURRENT, id, "o", gtype)
-	
-    const hotList = new Array<SnapshotDataType>()
-    const otherList = new Array<SnapshotDataType>()
+export const createSnapshot = async (
+    id: string,
+    gtype: string,
+    name: string
+) => {
+    const hot: Array<SkillTableType> = await getSkillTarget(
+        INFOVER.CURRENT,
+        id,
+        "h",
+        gtype
+    );
+    const oth: Array<SkillTableType> = await getSkillTarget(
+        INFOVER.CURRENT,
+        id,
+        "o",
+        gtype
+    );
 
-    hot.forEach(x => {
-        hotList.push(putSnapshotData(x))
-    })
+    const hotList = new Array<SnapshotDataType>();
+    const otherList = new Array<SnapshotDataType>();
 
-    oth.forEach(x => {
-        otherList.push(putSnapshotData(x))
-    })
-		for(i in 0..hot.size-1) {
-			val cur = hot[i]
-			val newobj = JSONObject()
-			newobj.put("mid", cur.musicid)
-			newobj.put("mname", cur.mname)
-			newobj.put("ptcode", cur.patterncode)
-			newobj.put("version", cur.version)
-			newobj.put("lv", cur.level)
-			newobj.put("rate", cur.rate)
-			newobj.put("skill", Math.floor((cur.rate*cur.level*20/10000).toDouble())/100)
-			newobj.put("rank", cur.rank)
-			newobj.put("fc", cur.checkfc)
-			newobj.put("meter", cur.meter)
-			jsonhot.add(newobj)
-		}
-		
-		for(i in 0..oth.size-1) {
-			val cur = oth[i]
-			val newobj = JSONObject()
-			newobj.put("mid", cur.musicid)
-			newobj.put("mname", cur.mname)
-			newobj.put("ptcode", cur.patterncode)
-			newobj.put("version", cur.version)
-			newobj.put("lv", cur.level)
-			newobj.put("rate", cur.rate)
-			newobj.put("skill", Math.floor((cur.rate*cur.level*20/10000).toDouble())/100)
-			newobj.put("rank", cur.rank)
-			newobj.put("fc", cur.checkfc)
-			newobj.put("meter", cur.meter)
-			jsonoth.add(newobj)
-		}
-		
-		val date = Date()
-		val df = SimpleDateFormat("yyyyMMdd")
-		json.put("uid", uid)
-		json.put("uname", uname)
-		json.put("date", df.format(date))
-		json.put("type", gtype)
-		json.put("hot", jsonhot)
-		json.put("oth", jsonoth)
-		
-		// 파일저장
-		val path = File(SecretConst.snapshotRealpathServer+uid+"/")
-		val file = File(SecretConst.snapshotRealpathServer+uid+"/"+df.format(date)+"_"+gtype+".json")
-	//	val path = File(SecretConst.snapshotRealpathLocal+uid+"/")
-	//	val file = File(SecretConst.snapshotRealpathLocal+uid+"/"+df.format(date)+"_"+gtype+".json")
-		
-		path.mkdirs()
-		if(file.exists()) file.delete()
-		file.createNewFile()
-		try {
-			val fw = FileWriter(file)
-			val bw = BufferedWriter(fw)
-			bw.write(json.toJSONString())
-			bw.close()
-			fw.close()
-		} catch(e: FileNotFoundException) {
-			e.printStackTrace()
-		} catch(e: IOException) {
-			e.printStackTrace()
-		}
+    hot.forEach((x) => {
+        hotList.push(putSnapshotData(x));
+    });
+
+    oth.forEach((x) => {
+        otherList.push(putSnapshotData(x));
+    });
+
+    const date = CommonTools.getToday();
+    const jsonStr = `
+        {
+            uid: ${id},
+            uname: ${name},
+            date: ${date},
+            type: ${gtype},
+            hot: ${JSON.stringify(hotList)},
+            oth: ${JSON.stringify(otherList)}
+        }
+    `;
+
+    const dirPath = `${SecretData.snapshotRealpathServer}${id}/`;
+    const filePath = `${SecretData.snapshotRealpathServer}${id}/${date}_${gtype}.json`;
+    // const dirPath = `${SecretData.snapshotRealpathLocal}${id}/`
+    // const filePath = `${SecretData.snapshotRealpathLocal}${id}/${date}_${gtype}.json`
+
+    !fs.existsSync(dirPath) && fs.mkdirSync(dirPath);
+    fs.existsSync(filePath) && fs.rm(filePath, () => {});
+    fs.writeFileSync(filePath, jsonStr);
+};
+
+export const listSnapshot = (id: string) => {
+    const dirPath = `${SecretData.snapshotRealpathServer}${id}/`;
+    // const dirPath = `${SecretData.snapshotRealpathLocal}${id}/`
+
+    if (!fs.existsSync(dirPath)) return null;
+    const list = fs.readdirSync(dirPath);
+    return list;
+};
+
+export const loadSnapshot = (id: string, date: string, gtype: string) => {
+    const filePath = `${SecretData.snapshotRealpathServer}${id}/${date}_${gtype}.json`;
+    const data = fs.readFileSync(filePath);
+    return data;
 };

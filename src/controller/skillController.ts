@@ -6,6 +6,8 @@ import {
     getSkillMid,
     getSkillRanking,
     getSkillTablePType,
+    listSnapshot,
+    loadSnapshot,
 } from "../service/skillService";
 import Filter from "../tool/Filter";
 import { UserType } from "../data/type/userType";
@@ -215,10 +217,23 @@ const SkillController = () => {
     });
 
     // Create snapshot
-    router.get("/skill/snapshot/create/:uid/:gtype", async (req, res) => {
-        const { uid, gtype } = req.params;
-        const user: UserType = await getUserById(uid);
-        createSnapshot(uid, gtype, user.name);
+    router.get("/skill/snapshot/create/:id/:gtype", async (req, res) => {
+        const { id, gtype } = req.params;
+        const user: UserType = await getUserById(id);
+        await createSnapshot(id, gtype, user.name);
+        res.send(`/skill/snapshot/list/${id}`);
+    });
+
+    // snapshot list
+    router.get("/skill/snapshot/list/:id", async (req, res) => {
+        const id = req.params.id;
+        res.send(`{list: ${JSON.stringify(listSnapshot(id))}}`);
+    });
+
+    // snapshot load
+    router.get("/skill/snapshot/load/:id/:date/:gtype", async (req, res) => {
+        const { id, date, gtype } = req.params;
+        res.send(loadSnapshot(id, date, gtype));
     });
 
     // Skill Ranking

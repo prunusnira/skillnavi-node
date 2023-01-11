@@ -30,7 +30,7 @@ app.use("/", BonusController());
 app.use("/recent", RecentController());
 app.use("/", SkillController());
 app.use("/", MusicController());
-app.use("/pattern", PatternController());
+app.use("/", PatternController());
 
 app.listen(config.server.port, () => {
     console.log(
