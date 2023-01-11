@@ -23,15 +23,9 @@ const enum QueryType {
     PlayCount,
 
     // Tower
-    RemoveTowerFloor,
-    RemoveTowerClear,
     TowerList,
     TowerInfo,
     TowerData,
-    TowerFloorUpdate,
-    TowerStatusUpdate,
-    SelectTowerStatus,
-    SelectFloorStatus,
 
     Recent,
     UserCount,

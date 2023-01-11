@@ -63,3 +63,14 @@ export const queryResetUser = (params: Array<string>) =>
         countgf=0,
         countdm=0
         WHERE id=${params[0]}`;
+
+export const queryUpdatePlayCount = (params: Array<string>) =>
+    `UPDATE profile SET
+        ${
+            params[1] === "gf"
+                ? `countgf = ` + params[2]
+                : params[1] === "dm"
+                ? `countdm = ` + params[2]
+                : `countall = ` + params[2]
+        }
+    WHERE id=${params[0]}`;

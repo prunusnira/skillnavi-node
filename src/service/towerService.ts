@@ -5,13 +5,6 @@ import { TowerType } from "../data/type/towerType";
 
 const db = new DBConnector();
 
-export const resetTower = (id: string) => {
-    const queryFloor = db.queryGen(QueryType.RemoveTowerFloor, [id]);
-    const queryClear = db.queryGen(QueryType.RemoveTowerClear, [id]);
-    db.runQuery(queryFloor);
-    db.runQuery(queryClear);
-};
-
 export const getTowerList = () => {
     const query = db.queryGen(QueryType.TowerList, []);
     return db.runQuery(query);
@@ -60,48 +53,4 @@ export const clearCheck = (d: TowerType, skill: SkillType) => {
         }
     } else clear = false;
     return clear;
-};
-
-export const updateFloorStatus = (
-    id: string,
-    tower: string,
-    floor: number,
-    mid: number,
-    ptcode: number,
-    clear: string
-) => {
-    const query = db.queryGen(QueryType.TowerFloorUpdate, [
-        id,
-        tower,
-        floor.toString(),
-        mid.toString(),
-        ptcode.toString(),
-        clear,
-    ]);
-    db.runQuery(query);
-};
-
-export const updateTowerStatus = (
-    id: string,
-    tower: string,
-    idx: number,
-    clear: string
-) => {
-    const query = db.queryGen(QueryType.TowerStatusUpdate, [
-        id,
-        tower,
-        idx.toString(),
-        clear,
-    ]);
-    db.runQuery(query);
-};
-
-export const selectTowerStatus = (id: string) => {
-    const query = db.queryGen(QueryType.SelectTowerStatus, [id]);
-    return db.runQuery(query);
-};
-
-export const selectFloorStatus = (id: string) => {
-    const query = db.queryGen(QueryType.SelectFloorStatus, [id]);
-    return db.runQuery(query);
 };

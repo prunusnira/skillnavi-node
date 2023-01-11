@@ -107,5 +107,6 @@ export const updatePlayCount = (id: string, gtype: string, count: number) => {
         gtype,
         count.toString(),
     ]);
+    console.log(query);
     db.runQuery(query);
 };

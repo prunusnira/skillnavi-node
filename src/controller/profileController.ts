@@ -19,12 +19,7 @@ import {
     getTowerData,
     getTowerInfo,
     getTowerList,
-    resetTower,
-    selectFloorStatus,
-    selectTowerStatus,
     towerCheck,
-    updateFloorStatus,
-    updateTowerStatus,
 } from "../service/towerService";
 import {
     getSkillRecord,
@@ -213,105 +208,17 @@ const ProfileController = () => {
         res.sendStatus(200);
     });
 
-    router.post("/d/profile/towerupdate/:id", async (req, res) => {
-        const id = req.params.id;
-        resetTower(id);
-
-        const towerList: Array<string> = await getTowerList();
-
-        if (towerList) {
-            towerList.forEach(async (x) => {
-                if (towerCheck(x)) {
-                    const info: TowerManageType = await getTowerInfo(x);
-                    const sizeAll = new Array<number>(info.levels).fill(0);
-                    const sizeCl = new Array<number>(info.levels).fill(0);
-                    const towerData: Array<TowerType> = await getTowerData(x);
-
-                    if (towerData) {
-                        towerData.forEach(async (t, i) => {
-                            const skill: SkillType = await getSkill(
-                                id,
-                                t.musicid,
-                                t.ptcode
-                            );
-                            const clear = clearCheck(t, skill);
-                            if (clear) {
-                                updateFloorStatus(
-                                    id,
-                                    x,
-                                    t.floor,
-                                    t.musicid,
-                                    t.ptcode,
-                                    "Y"
-                                );
-                                sizeCl[t.floor]++;
-                            } else {
-                                updateFloorStatus(
-                                    id,
-                                    x,
-                                    t.floor,
-                                    t.musicid,
-                                    t.ptcode,
-                                    "N"
-                                );
-                            }
-                            sizeAll[t.floor]++;
-                        });
-
-                        for (let i = 0; i < info.levels; i++) {
-                            let all = sizeAll[i];
-                            let clear = sizeCl[i];
-                            if (clear >= all * 0.7)
-                                updateTowerStatus(id, x, i, "Y");
-                            else updateTowerStatus(id, x, i, "N");
-                        }
-                        res.sendStatus(200);
-                    } else {
-                        res.sendStatus(400);
-                    }
-                }
-            });
-        } else {
-            res.sendStatus(400);
-        }
-    });
-
-    router.get("/profile/towerstatus/tower/:id", async (req, res) => {
-        const id = req.params.id;
-        const info: Array<string> = await getTowerList();
-        const filtered = info.filter((x, i) => {
-            x !== "towerSample" &&
-                x !== "towerManage" &&
-                x !== "towerTest" &&
-                x !== "towerStatusClear" &&
-                x !== "towerStatusFloor";
-        });
-
-        const tower = selectTowerStatus(id);
-
-        res.setHeader("Content-Type", "application/json");
-        res.send(
-            `list: ${JSON.stringify(info)}, tower: ${JSON.stringify(tower)}`
-        );
-    });
-
-    router.get("/profile/towerstatus/floor/:id", async (req, res) => {
-        const id = req.params.id;
-        const floor = selectFloorStatus(id);
-
-        res.setHeader("Content-Type", "application/json");
-        res.send(`floor: ${JSON.stringify(floor)}`);
-    });
-
     router.post("/profile/countupdate/:id", async (req, res) => {
         const id = req.params.id;
-        const gfc: number = await getPlayCount(id, "gf");
-        const dfc: number = await getPlayCount(id, "dm");
+        const gpc = await getPlayCount(id, "gf");
+        const dpc = await getPlayCount(id, "dm");
+        const gfc: number = gpc[0].cnt;
+        const dfc: number = dpc[0].cnt;
         updatePlayCount(id, "gf", gfc);
         updatePlayCount(id, "dm", dfc);
         updatePlayCount(id, "all", gfc + dfc);
 
-        res.send(200);
+        res.sendStatus(200);
     });
 
     return router;

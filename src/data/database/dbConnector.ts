@@ -5,8 +5,16 @@ import {
     queryTotalPatternCountDM,
     queryTotalPatternCountGF,
 } from "./query/queryGenMusic";
-import { queryResetSkill } from "./query/queryGenSkill";
-import { queryTowerInfo, queryTowerList } from "./query/queryGenTower";
+import {
+    queryPlayCount,
+    queryResetSkill,
+    querySkillData,
+} from "./query/queryGenSkill";
+import {
+    queryTowerData,
+    queryTowerInfo,
+    queryTowerList,
+} from "./query/queryGenTower";
 import {
     queryGetUserId,
     queryGetUserToken,
@@ -14,6 +22,7 @@ import {
     queryResetUser,
     queryUpdateComment,
     queryUpdateDataOpen,
+    queryUpdatePlayCount,
     queryUserCount,
 } from "./query/queryGenUser";
 import { querySkillRanking } from "./query/querySkillRanking";
@@ -30,7 +39,11 @@ class DBConnector {
 
     queryGen = (queryType: QueryType, params: Array<string>): string => {
         switch (queryType) {
-            // Profile
+            // User
+            case QueryType.Recent:
+                return queryRecent();
+            case QueryType.UserCount:
+                return queryUserCount();
             case QueryType.UserByToken:
                 return queryGetUserToken(params);
             case QueryType.UserById:
@@ -41,6 +54,8 @@ class DBConnector {
                 return queryUpdateComment(params);
             case QueryType.ResetUser:
                 return queryResetUser(params);
+            case QueryType.UpdatePlayCount:
+                return queryUpdatePlayCount(params);
 
             // Music
             case QueryType.TotalPatternCountGF:
@@ -51,25 +66,23 @@ class DBConnector {
                 return queryNonPlay(params);
 
             // Skill
+            case QueryType.SkillRanking:
+                return querySkillRanking(params);
             case QueryType.ResetSkill:
                 return queryResetSkill(params);
+            case QueryType.SkillData:
+                return querySkillData(params);
+            case QueryType.PlayCount:
+                return queryPlayCount(params);
 
             // Tower
             case QueryType.TowerList:
                 return queryTowerList();
             case QueryType.TowerInfo:
                 return queryTowerInfo(params);
-            case QueryType.RemoveTowerFloor:
-                return ``;
-            case QueryType.RemoveTowerClear:
-                return ``;
+            case QueryType.TowerData:
+                return queryTowerData(params);
 
-            case QueryType.Recent:
-                return queryRecent();
-            case QueryType.UserCount:
-                return queryUserCount();
-            case QueryType.SkillRanking:
-                return querySkillRanking(params);
             default:
                 return "";
         }

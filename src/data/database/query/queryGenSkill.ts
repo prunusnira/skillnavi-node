@@ -35,3 +35,33 @@ WHERE
 
 export const queryResetSkill = (params: Array<string>) =>
     `DELETE FROM skill WHERE userid=${params[0]}`;
+
+export const querySkillData = (params: Array<string>) =>
+    `SELECT
+        userid,
+        musicid,
+        version,
+        patterncode,
+        playtime,
+        cleartime,
+        rank,
+        rate,
+        ratehv,
+        ratenx,
+        rateex,
+        ratemx,
+        ratetbre,
+        ratetb,
+        score,
+        combo,
+        checkfc,
+        meter
+    FROM skill
+    WHERE musicid = ${params[1]} AND userid = ${params[0]} AND patterncode = ${params[2]}`;
+
+export const queryPlayCount = (params: Array<string>) =>
+    `SELECT SUM(playtime) as cnt
+    FROM skill
+    WHERE userid=${params[0]}
+    AND
+        ${params[1] === "gf" ? "patterncode <= 8" : "patterncode >= 9"}`;
