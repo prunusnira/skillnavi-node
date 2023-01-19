@@ -24,6 +24,20 @@ export const getSkillMid = (id: string, mid: string) => {
     return db.runQuery(query);
 };
 
+// 한 패턴에 대한 전체 스킬 목록 가져오기
+export const getSkillRankingForOnePattern = (
+    mid: string,
+    ptcode: string,
+    version: string
+) => {
+    const query = db.queryGen(QueryType.SkillRankingForOnePattern, [
+        mid,
+        ptcode,
+        version,
+    ]);
+    return db.runQuery(query);
+};
+
 // 전체 스킬 가져오기
 export const getSkillAll = (
     id: number,

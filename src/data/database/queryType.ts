@@ -31,6 +31,7 @@ const enum QueryType {
     SkillDataTarget,
     PlayCount,
     EXCSkill,
+    SkillRankingForOnePattern,
 
     // Tower
     TowerList,

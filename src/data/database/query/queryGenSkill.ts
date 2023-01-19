@@ -332,3 +332,5 @@ export const queryEXCSkill = (params: Array<string>) =>
     ) c ON b.id = c.id AND b.level = c.level AND
     ${params[0] === "gf" ? "c.patterncode <= 8" : "c.patterncode >= 9"}
     GROUP BY musicid ORDER BY level DESC`;
+
+export const getSkillRankingForOnePattern = (params: Array<string>) => ``;
