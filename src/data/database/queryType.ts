@@ -39,6 +39,10 @@ const enum QueryType {
     TowerInfo,
     TowerData,
 
+    // Notice
+    TopNotice,
+    NoticeList,
+
     Recent,
     UserCount,
     SkillRanking,

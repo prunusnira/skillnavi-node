@@ -113,6 +113,14 @@ const PatternController = () => {
     router.get("/cntrank/:page", async (req, res) => {
         const { page } = req.params;
         const rankList = await getPlayCountAll();
+        const sendList = CommonTools.getPagedList(rankList, parseInt(page), 30);
+        const pages = CommonTools.getListPages(rankList, 30);
+
+        res.send(`{
+            rank: ${JSON.stringify(sendList)},
+            page: ${page},
+            pages: ${pages}
+        }`);
     });
 
     return router;

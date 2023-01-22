@@ -35,6 +35,7 @@ import {
 } from "./query/queryGenUser";
 import { querySkillRanking } from "./query/queryGenSkillRanking";
 import QueryType from "./queryType";
+import { queryNoticeList, queryTopNotice } from "./query/queryGenNotice";
 
 class DBConnector {
     dbpool = mariadb.createPool({
@@ -110,6 +111,12 @@ class DBConnector {
                 return queryTowerInfo(params);
             case QueryType.TowerData:
                 return queryTowerData(params);
+
+            // Notice
+            case QueryType.NoticeList:
+                return queryNoticeList(params);
+            case QueryType.TopNotice:
+                return queryTopNotice();
 
             default:
                 return "";
