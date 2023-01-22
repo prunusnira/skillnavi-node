@@ -15,6 +15,7 @@ import {
     querySkillDataMid,
     querySkillDataOne,
     querySkillDataTarget,
+    querySkillRankingForOnePattern,
 } from "./query/queryGenSkill";
 import {
     queryTowerData,
@@ -24,6 +25,7 @@ import {
 import {
     queryGetUserId,
     queryGetUserToken,
+    queryPlayCountAll,
     queryRecent,
     queryResetUser,
     queryUpdateComment,
@@ -68,6 +70,8 @@ class DBConnector {
                 return queryResetUser(params);
             case QueryType.UpdatePlayCount:
                 return queryUpdatePlayCount(params);
+            case QueryType.PlayCountAll:
+                return queryPlayCountAll();
 
             // Music
             case QueryType.TotalPatternCountGF:
@@ -96,6 +100,8 @@ class DBConnector {
                 return queryPlayCount(params);
             case QueryType.EXCSkill:
                 return queryEXCSkill(params);
+            case QueryType.SkillRankingForOnePattern:
+                return querySkillRankingForOnePattern(params);
 
             // Tower
             case QueryType.TowerList:

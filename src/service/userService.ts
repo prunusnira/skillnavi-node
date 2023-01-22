@@ -110,3 +110,8 @@ export const updatePlayCount = (id: string, gtype: string, count: number) => {
     console.log(query);
     db.runQuery(query);
 };
+
+export const getPlayCountAll = () => {
+    const query = db.queryGen(QueryType.PlayCountAll, []);
+    return db.runQuery(query);
+};

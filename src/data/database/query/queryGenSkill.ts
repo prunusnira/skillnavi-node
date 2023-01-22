@@ -333,4 +333,48 @@ export const queryEXCSkill = (params: Array<string>) =>
     ${params[0] === "gf" ? "c.patterncode <= 8" : "c.patterncode >= 9"}
     GROUP BY musicid ORDER BY level DESC`;
 
-export const getSkillRankingForOnePattern = (params: Array<string>) => ``;
+export const querySkillRankingForOnePattern = (params: Array<string>) =>
+    `SELECT
+    p.id as userid,
+    p.name as name,
+
+    ${params[2] === "30" ? "s.rate as rate," : ""}
+    ${params[2] === "29" ? "s.ratehv as rate," : ""}
+    ${params[2] === "28" ? "s.ratenx as rate," : ""}
+    ${params[2] === "27" ? "s.rateex as rate," : ""}
+    ${params[2] === "26" ? "s.ratemx as rate," : ""}
+    ${params[2] === "25" ? "s.ratetbre as rate," : ""}
+    ${params[2] === "24" ? "s.ratetb as rate," : ""}
+
+    s.checkfc as checkfc,
+    s.rank as rank
+    FROM
+    skill as s
+    ${params[2] === "30" ? "USE INDEX(ptrank_fuzzup)" : ""}
+    ${params[2] === "29" ? "USE INDEX(ptrank_hv)" : ""}
+    ${params[2] === "28" ? "USE INDEX(ptrank_nextage)" : ""}
+    ${params[2] === "27" ? "USE INDEX(ptrank_exchain)" : ""}
+    ${params[2] === "26" ? "USE INDEX(ptrank_matixx)" : ""}
+    ${params[2] === "25" ? "USE INDEX(ptrank_tbre)" : ""}
+    ${params[2] === "24" ? "USE INDEX(ptrank_tb)" : ""}
+    ,
+    profile as p USE INDEX (id_name)
+    WHERE s.musicid=${params[0]}
+    AND s.patterncode=${params[1]}
+    AND s.userid=p.id
+    ${params[2] === "30" ? "AND s.rate > 0" : ""}
+    ${params[2] === "29" ? "AND s.ratehv > 0" : ""}
+    ${params[2] === "28" ? "AND s.ratenx > 0" : ""}
+    ${params[2] === "27" ? "AND s.rateex > 0" : ""}
+    ${params[2] === "26" ? "AND s.ratemx > 0" : ""}
+    ${params[2] === "25" ? "AND s.ratetbre > 0" : ""}
+    ${params[2] === "24" ? "AND s.ratetb > 0" : ""}
+    ORDER BY
+    ${params[2] === "30" ? "s.rate" : ""}
+    ${params[2] === "29" ? "s.ratehv" : ""}
+    ${params[2] === "28" ? "s.ratenx" : ""}
+    ${params[2] === "27" ? "s.rateex" : ""}
+    ${params[2] === "26" ? "s.ratemx" : ""}
+    ${params[2] === "25" ? "s.ratetbre" : ""}
+    ${params[2] === "24" ? "s.ratetb" : ""}
+    DESC`;

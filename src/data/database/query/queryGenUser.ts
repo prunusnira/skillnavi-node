@@ -74,3 +74,9 @@ export const queryUpdatePlayCount = (params: Array<string>) =>
                 : `countall = ` + params[2]
         }
     WHERE id=${params[0]}`;
+
+export const queryPlayCountAll = () =>
+    `SELECT
+        id, titletower, name, opencount, countgf, countdm
+    FROM profile
+    ORDER BY countgf+countdm DESC`;

@@ -4,7 +4,11 @@ import { SkillType } from "../data/type/skillType";
 import { UserType } from "../data/type/userType";
 import { getMusicInfo, getMusicList } from "../service/musicService";
 import { getSkillRankingForOnePattern } from "../service/skillService";
-import { getUserById, getUserByToken } from "../service/userService";
+import {
+    getPlayCountAll,
+    getUserById,
+    getUserByToken,
+} from "../service/userService";
 import CommonTools from "../tool/CommonTools";
 import Filter from "../tool/Filter";
 
@@ -77,7 +81,7 @@ const PatternController = () => {
     // Pattern rank
     router.get("/ptrank/:mid/:ptcode/:page/:version", async (req, res) => {
         const { mid, ptcode, page, version } = req.params;
-        const music = getMusicInfo(mid);
+        const music = await getMusicInfo(mid);
         const skillList: Array<SkillType> = await getSkillRankingForOnePattern(
             mid,
             ptcode,
@@ -103,6 +107,12 @@ const PatternController = () => {
             list: ${JSON.stringify(sendList)},
             users: ${JSON.stringify(userList)}
         }`);
+    });
+
+    // count rank
+    router.get("/cntrank/:page", async (req, res) => {
+        const { page } = req.params;
+        const rankList = await getPlayCountAll();
     });
 
     return router;

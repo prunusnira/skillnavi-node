@@ -10,6 +10,7 @@ const enum QueryType {
     UpdateComment,
     ResetUser,
     UpdatePlayCount,
+    PlayCountAll,
 
     // Music
     TotalPatternCountGF,
